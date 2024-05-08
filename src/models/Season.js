@@ -14,7 +14,7 @@ const Season = new Schema({
         campus: { 
             type: String, 
             required: true },
-        typeOfAccomodation: { 
+        accommodationType: { 
             type: String, enum: ['standard', 'premium', 'VIP'], 
             required: true },
         price: { 

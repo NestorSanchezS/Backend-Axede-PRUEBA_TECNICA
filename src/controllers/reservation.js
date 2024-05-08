@@ -1,4 +1,5 @@
 const Reservation = require('../models/reservation');
+const Season = require('../models/season');
 
 exports.createReservation = async (req, res) => {
     const { hotelId, roomId, startDate, endDate, numberOfPeople, accommodationType, seasonId } = req.body;
@@ -22,7 +23,7 @@ exports.createReservation = async (req, res) => {
 }
 
 
-exports.checkAvailability = async (req, res, next) => {
+exports.checkAvailability = async (req, res) => {
     const { hotelId, startDate, endDate } = req.body;
     try {
         const reservations = await Reservation.find({
@@ -49,5 +50,26 @@ exports.checkAvailability = async (req, res, next) => {
         }
     } catch (error) {
         res.status(500).json({ success:false, info: error.message });
+    }
+}
+
+exports.calculateRate = async (req, res) => {
+    const { hotelId, accommodationType, seasonId, numberOfPeople } = req.body;
+    try {
+        const season = await Season.findById(seasonId);
+        const rate = season.rates.find(
+            rate => rate.campus === hotelId && rate.accommodationType === accommodationType
+        );
+
+        if (!rate) {
+            return res.status(400).json({ message: 'Rate not found' });
+        }
+
+        const price = rate.price;
+        const total = price * numberOfPeople;
+
+        res.json({success:true, rate: total });
+    } catch (error) {
+        res.status(500).json({success:false, info: error.message });
     }
 }
