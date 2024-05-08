@@ -37,7 +37,8 @@ exports.checkAvailability = async (req, res) => {
         reservations.forEach(reservation => {
             if (
                 reservation.startDate <= endDate &&
-                reservation.endDate >= startDate
+                reservation.endDate >= startDate && 
+                reservation.room.type === accommodationType && reservation.numberOfPeople === numberOfPeople
             ) {
                 roomsAvailable = false;
             }
@@ -68,7 +69,7 @@ exports.calculateRate = async (req, res) => {
         const price = rate.price;
         const total = price * numberOfPeople;
 
-        res.json({success:true, rate: total });
+        res.status(200).json({success:true, rate: total });
     } catch (error) {
         res.status(500).json({success:false, info: error.message });
     }

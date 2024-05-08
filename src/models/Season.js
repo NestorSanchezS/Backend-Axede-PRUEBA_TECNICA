@@ -4,10 +4,10 @@ const Season = new Schema({
     name: { 
         type: String, 
         required: true },
-    dateInit: { 
+    startDate: { 
         type: Date, 
         required: true },
-    dateEnd: { 
+    endDate: { 
         type: Date, 
         required: true },
     rates: [{
